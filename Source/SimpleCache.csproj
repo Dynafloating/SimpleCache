@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Frank Tsai</Authors>
+    <Company>Frank Tsai</Company>
+    <Description>A very simple .net cache library.</Description>
+    <Version>0.1.0</Version>
+    <PackageProjectUrl>https://github.com/Dynafloating/SimpleCache</PackageProjectUrl>
+    <Copyright>Apache License 2.0</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\frank\source\repos\SimpleCache\Source\SimpleCache.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>

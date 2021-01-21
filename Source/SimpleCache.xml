@@ -1,0 +1,356 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimpleCache</name>
+    </assembly>
+    <members>
+        <member name="T:SimpleCache.ISimpleCacheService">
+            <summary>
+            An Asp.net core naming style interface of SimpleCacheStorage for dependency injection.
+            </summary>
+        </member>
+        <member name="P:SimpleCache.ISimpleCacheService.ClearInterval">
+            <summary>
+            Interval of timer which will check and clear overdue data periodically.
+            Default value is 10000ms (10 secands).
+            </summary>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.ContainsKey(System.String)">
+            <summary>
+            Determines whether specified key existed in cache.
+            </summary>
+            <param name="key">The key of the data to check.</param>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.IsOverDue(System.String)">
+            <summary>
+            Determines whether specified key was over due, which will be remove in next clear period.
+            </summary>
+            <param name="key">The key of the data to check.</param>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Get(System.String)">
+            <summary>
+            Attempts to get the data associated with the specified key.
+            </summary>
+            <param name="key">The key of the data to get.</param>
+            <returns>Return data in object form if key was found; otherwise return null.</returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Get``1(System.String)">
+            <summary>
+            Attempts to get the data in specified type associated with the specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to get.</param>
+            <returns>Return data in specified type if key was found; otherwise return default value of type.</returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Get``1(System.String,System.Func{``0})">
+            <summary>
+            Attempts to get the data in specified type associated with the specified key; 
+            or return output of specified func when key was not found.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to get.</param>
+            <param name="replaceFunc">Func that return data when key was not found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.GetAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Attempts to get the data in specified type associated with the specified key; 
+            or return output of specified async func when key was not found.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to get.</param>
+            <param name="replaceFunc">Async func that return data when key was not found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Add``1(System.String,``0)">
+            <summary>
+            Attempts to add specified key and data to cache.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to add.</param>
+            <param name="data">Data to add.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Add``1(System.String,``0,System.TimeSpan)">
+            <summary>
+            Attempts to add specified key and data to cache with specified lifespan.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to add.</param>
+            <param name="data">Data to add.</param>
+            <param name="lifeSpan">Lifespan of the data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Add``1(System.String,``0,System.DateTime)">
+            <summary>
+            Attempts to add specified key and data to cache with specified due.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to add.</param>
+            <param name="data">Data to add.</param>
+            <param name="due">Due of the data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Replace``1(System.String,``0)">
+            <summary>
+            Attempts to replace data with specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to replace.</param>
+            <param name="data">New data to replace.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Extend(System.String)">
+            <summary>
+            Attempts to extend due of data use existing lifespan.
+            </summary>
+            <param name="key">Key of the data to extend.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Extend(System.String,System.TimeSpan)">
+            <summary>
+            Attempts to extend due of data use specified lifespan. New lifespan will be saved.
+            </summary>
+            <param name="key">Key of the data to extend.</param>
+            <param name="lifeSpan">New lifespan.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Renew``1(System.String,``0)">
+            <summary>
+            Attempts to extend then replace data with specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to renew.</param>
+            <param name="data">New data to renew.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.UpdateDue(System.String,System.DateTime,System.Boolean)">
+            <summary>
+            Attempts to update due of data with specified key.
+            </summary>
+            <param name="key">Key of the data to update.</param>
+            <param name="due">New due of data.</param>
+            <param name="updateLifeSpan">Recalculate lifespan of data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Remove(System.String)">
+            <summary>
+            Attempts to remove data with the specified key.
+            </summary>
+            <param name="key">The key of the data to remove.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.ClearOverDues">
+            <summary>
+            Removes all overdue datas.
+            </summary>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Clear">
+            <summary>
+            Removes all keys and datas.
+            </summary>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndReplace``1(System.String,System.Func{``0})">
+            <summary>
+            Check if specified key exists. If not, execute replace func to generate a new one.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to check.</param>
+            <param name="replaceFunc">Replace func to generate.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndReplaceAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Check if specified key exists. If not, execute async replace func to generate a new one.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to check.</param>
+            <param name="replaceFunc">Async replace func to generate.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleCache.SimpleCacheService">
+            <summary>
+            An Asp.net core naming style class of SimpleCacheStorage for dependency injection.
+            </summary>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheService.#ctor">
+            <summary>
+            SimpleCacheService
+            </summary>
+        </member>
+        <member name="T:SimpleCache.SimpleCacheStorage">
+            <summary>
+            SimpleCacheStorage
+            </summary>
+        </member>
+        <member name="P:SimpleCache.SimpleCacheStorage.ClearInterval">
+            <summary>
+            Interval of timer which will check and clear overdue data periodically.
+            Default value is 10000ms (10 secands).
+            </summary>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.#ctor">
+            <summary>
+            SimpleCacheStorage
+            </summary>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.ContainsKey(System.String)">
+            <summary>
+            Determines whether specified key existed in cache.
+            </summary>
+            <param name="key">The key of the data to check.</param>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.IsOverDue(System.String)">
+            <summary>
+            Determines whether specified key was over due, which will be remove in next clear period.
+            </summary>
+            <param name="key">The key of the data to check.</param>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Get(System.String)">
+            <summary>
+            Attempts to get the data associated with the specified key.
+            </summary>
+            <param name="key">The key of the data to get.</param>
+            <returns>Return data in object form if key was found; otherwise return null.</returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Get``1(System.String)">
+            <summary>
+            Attempts to get the data in specified type associated with the specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to get.</param>
+            <returns>Return data in specified type if key was found; otherwise return default value of type.</returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Get``1(System.String,System.Func{``0})">
+            <summary>
+            Attempts to get the data in specified type associated with the specified key; 
+            or return output of specified func when key was not found.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to get.</param>
+            <param name="replaceFunc">Func that return data when key was not found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.GetAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Attempts to get the data in specified type associated with the specified key; 
+            or return output of specified async func when key was not found.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to get.</param>
+            <param name="replaceFunc">Async func that return data when key was not found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Add``1(System.String,``0)">
+            <summary>
+            Attempts to add specified key and data to cache.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to add.</param>
+            <param name="data">Data to add.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Add``1(System.String,``0,System.TimeSpan)">
+            <summary>
+            Attempts to add specified key and data to cache with specified lifespan.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to add.</param>
+            <param name="data">Data to add.</param>
+            <param name="lifeSpan">Lifespan of the data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Add``1(System.String,``0,System.DateTime)">
+            <summary>
+            Attempts to add specified key and data to cache with specified due.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to add.</param>
+            <param name="data">Data to add.</param>
+            <param name="due">Due of the data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Replace``1(System.String,``0)">
+            <summary>
+            Attempts to replace data with specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to replace.</param>
+            <param name="data">New data to replace.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Extend(System.String)">
+            <summary>
+            Attempts to extend due of data use existing lifespan.
+            </summary>
+            <param name="key">Key of the data to extend.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Extend(System.String,System.TimeSpan)">
+            <summary>
+            Attempts to extend due of data use specified lifespan. New lifespan will be saved.
+            </summary>
+            <param name="key">Key of the data to extend.</param>
+            <param name="lifeSpan">New lifespan.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Renew``1(System.String,``0)">
+            <summary>
+            Attempts to extend then replace data with specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to renew.</param>
+            <param name="data">New data to renew.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.UpdateDue(System.String,System.DateTime,System.Boolean)">
+            <summary>
+            Attempts to update due of data with specified key.
+            </summary>
+            <param name="key">Key of the data to update.</param>
+            <param name="due">New due of data.</param>
+            <param name="updateLifeSpan">Recalculate lifespan of data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Remove(System.String)">
+            <summary>
+            Attempts to remove data with the specified key.
+            </summary>
+            <param name="key">The key of the data to remove.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.ClearOverDues">
+            <summary>
+            Removes all overdue datas.
+            </summary>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Clear">
+            <summary>
+            Removes all keys and datas.
+            </summary>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndReplace``1(System.String,System.Func{``0})">
+            <summary>
+            Check if specified key exists. If not, execute replace func to generate a new one.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to check.</param>
+            <param name="replaceFunc">Replace func to generate.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndReplaceAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Check if specified key exists. If not, execute async replace func to generate a new one.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">The key of the data to check.</param>
+            <param name="replaceFunc">Async replace func to generate.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Dispose">
+            <summary>
+            Remove all keys and datas.
+            </summary>
+        </member>
+    </members>
+</doc>
