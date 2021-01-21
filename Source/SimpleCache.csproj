@@ -9,10 +9,16 @@
     <Version>0.1.0</Version>
     <PackageProjectUrl>https://github.com/Dynafloating/SimpleCache</PackageProjectUrl>
     <Copyright>Apache License 2.0</Copyright>
+    <RepositoryUrl>https://github.com/Dynafloating/SimpleCache</RepositoryUrl>
+    <PackageId>FT.SimpleCache</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Users\frank\source\repos\SimpleCache\Source\SimpleCache.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SimpleCache.xml" />
+  </ItemGroup>
 
 </Project>
