@@ -82,28 +82,84 @@ namespace SimpleCache
 
         /// <summary>
         /// Attempts to get the data in specified type associated with the specified key; 
-        /// or return output of specified func when key was not found.
+        /// or add/replace data with output of specified func when key was not found.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">The key of the data to get.</param>
         /// <param name="replaceFunc">Func that return data when key was not found.</param>
         /// <returns></returns>
-        public T Get<T>(string key, Func<T> replaceFunc)
+        public T SmartGet<T>(string key, Func<T> replaceFunc)
         {
-            return CheckAndReplace(key, replaceFunc) ? Get<T>(key) : default;
+            return CheckAndAddOrReplace(key, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
         /// Attempts to get the data in specified type associated with the specified key; 
-        /// or return output of specified async func when key was not found.
+        /// or add/replace data with output of specified async func when key was not found.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">The key of the data to get.</param>
         /// <param name="replaceFunc">Async func that return data when key was not found.</param>
         /// <returns></returns>
-        public async Task<T> GetAsync<T>(string key, Func<Task<T>> replaceFunc)
+        public async Task<T> SmartGetAsync<T>(string key, Func<Task<T>> replaceFunc)
         {
-            return await CheckAndReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
+            return await CheckAndAddOrReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
+        }
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Func that return data when key was not found.</param>
+        /// <returns></returns>
+        public T SmartGet<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc)
+        {
+            return CheckAndAddOrReplace(key, replaceFunc) ? Get<T>(key) : default;
+        }
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified async func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Async func that return data when key was not found.</param>
+        /// <returns></returns>
+        public async Task<T> SmartGetAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc)
+        {
+            return await CheckAndAddOrReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
+        }
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Func that return data when key was not found.</param>
+        /// <returns></returns>
+        public T SmartGet<T>(string key, DateTime due, Func<T> replaceFunc)
+        {
+            return CheckAndAddOrReplace(key, replaceFunc) ? Get<T>(key) : default;
+        }
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified async func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Async func that return data when key was not found.</param>
+        /// <returns></returns>
+        public async Task<T> SmartGetAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc)
+        {
+            return await CheckAndAddOrReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
         }
 
         #endregion
@@ -119,7 +175,7 @@ namespace SimpleCache
         /// <returns></returns>
         public virtual bool Add<T>(string key, T data)
         {
-            return Remove(key) && _storage.TryAdd(key, PackageData(data));
+            return _storage.TryAdd(key, PackageData(data));
         }
 
         /// <summary>
@@ -132,7 +188,7 @@ namespace SimpleCache
         /// <returns></returns>
         public virtual bool Add<T>(string key, T data, TimeSpan lifeSpan)
         {
-            return Remove(key) && _storage.TryAdd(key, PackageData(data, lifeSpan));
+            return _storage.TryAdd(key, PackageData(data, lifeSpan));
         }
 
         /// <summary>
@@ -144,6 +200,44 @@ namespace SimpleCache
         /// <param name="due">Due of the data.</param>
         /// <returns></returns>
         public virtual bool Add<T>(string key, T data, DateTime due)
+        {
+            return _storage.TryAdd(key, PackageData(data, due));
+        }
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache. If specified key exists, then replace it.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to add.</param>
+        /// <param name="data">Data to add.</param>
+        /// <returns></returns>
+        public virtual bool AddOrReplace<T>(string key, T data)
+        {
+            return Remove(key) && _storage.TryAdd(key, PackageData(data));
+        }
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache with specified lifespan. If specified key exists, then replace it.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to add.</param>
+        /// <param name="data">Data to add.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <returns></returns>
+        public virtual bool AddOrReplace<T>(string key, T data, TimeSpan lifeSpan)
+        {
+            return Remove(key) && _storage.TryAdd(key, PackageData(data, lifeSpan));
+        }
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache with specified due. If specified key exists, then replace it.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to add.</param>
+        /// <param name="data">Data to add.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <returns></returns>
+        public virtual bool AddOrReplace<T>(string key, T data, DateTime due)
         {
             return Remove(key) && _storage.TryAdd(key, PackageData(data, due));
         }
@@ -286,12 +380,12 @@ namespace SimpleCache
         /// <param name="key">The key of the data to check.</param>
         /// <param name="replaceFunc">Replace func to generate.</param>
         /// <returns></returns>
-        public virtual bool CheckAndReplace<T>(string key, Func<T> replaceFunc)
+        public virtual bool CheckAndAddOrReplace<T>(string key, Func<T> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
             {
-                return Add(key, replaceFunc());
+                return AddOrReplace(key, replaceFunc());
             }
             else if (isOverDue.Value)
             {
@@ -308,12 +402,104 @@ namespace SimpleCache
         /// <param name="key">The key of the data to check.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        public virtual async Task<bool> CheckAndReplaceAsync<T>(string key, Func<Task<T>> replaceFunc)
+        public virtual async Task<bool> CheckAndAddOrReplaceAsync<T>(string key, Func<Task<T>> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
             {
-                return Add(key, await replaceFunc());
+                return AddOrReplace(key, await replaceFunc());
+            }
+            else if (isOverDue.Value)
+            {
+                return Replace(key, await replaceFunc());
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Replace func to generate.</param>
+        /// <returns></returns>
+        public virtual bool CheckAndAddOrReplace<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc)
+        {
+            var isOverDue = IsOverDue(key);
+            if (!isOverDue.HasValue)
+            {
+                return AddOrReplace(key, replaceFunc(), lifeSpan);
+            }
+            else if (isOverDue.Value)
+            {
+                return Replace(key, replaceFunc());
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute async replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Async replace func to generate.</param>
+        /// <returns></returns>
+        public virtual async Task<bool> CheckAndAddOrReplaceAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc)
+        {
+            var isOverDue = IsOverDue(key);
+            if (!isOverDue.HasValue)
+            {
+                return AddOrReplace(key, await replaceFunc(), lifeSpan);
+            }
+            else if (isOverDue.Value)
+            {
+                return Replace(key, await replaceFunc());
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Replace func to generate.</param>
+        /// <returns></returns>
+        public virtual bool CheckAndAddOrReplace<T>(string key, DateTime due, Func<T> replaceFunc)
+        {
+            var isOverDue = IsOverDue(key);
+            if (!isOverDue.HasValue)
+            {
+                return AddOrReplace(key, replaceFunc(), due);
+            }
+            else if (isOverDue.Value)
+            {
+                return Replace(key, replaceFunc());
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute async replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Async replace func to generate.</param>
+        /// <returns></returns>
+        public virtual async Task<bool> CheckAndAddOrReplaceAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc)
+        {
+            var isOverDue = IsOverDue(key);
+            if (!isOverDue.HasValue)
+            {
+                return AddOrReplace(key, await replaceFunc(), due);
             }
             else if (isOverDue.Value)
             {
@@ -329,6 +515,8 @@ namespace SimpleCache
         public virtual void Dispose()
         {
             Clear();
+            _timer.Stop();
+            _timer.Dispose();
         }
 
         #endregion

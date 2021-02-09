@@ -43,26 +43,70 @@ namespace SimpleCache
 
         /// <summary>
         /// Attempts to get the data in specified type associated with the specified key; 
-        /// or return output of specified func when key was not found.
+        /// or add/replace data with output of specified func when key was not found.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">The key of the data to get.</param>
         /// <param name="replaceFunc">Func that return data when key was not found.</param>
         /// <returns></returns>
-        T Get<T>(string key, Func<T> replaceFunc);
+        T SmartGet<T>(string key, Func<T> replaceFunc);
 
         /// <summary>
         /// Attempts to get the data in specified type associated with the specified key; 
-        /// or return output of specified async func when key was not found.
+        /// or add/replace data with output of specified async func when key was not found.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">The key of the data to get.</param>
         /// <param name="replaceFunc">Async func that return data when key was not found.</param>
         /// <returns></returns>
-        Task<T> GetAsync<T>(string key, Func<Task<T>> replaceFunc);
+        Task<T> SmartGetAsync<T>(string key, Func<Task<T>> replaceFunc);
 
         /// <summary>
-        /// Attempts to add specified key and data to cache.
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Func that return data when key was not found.</param>
+        /// <returns></returns>
+        T SmartGet<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc);
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified async func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Async func that return data when key was not found.</param>
+        /// <returns></returns>
+        Task<T> SmartGetAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc);
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Func that return data when key was not found.</param>
+        /// <returns></returns>
+        T SmartGet<T>(string key, DateTime due, Func<T> replaceFunc);
+
+        /// <summary>
+        /// Attempts to get the data in specified type associated with the specified key; 
+        /// or add/replace data with output of specified async func when key was not found.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to get.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Async func that return data when key was not found.</param>
+        /// <returns></returns>
+        Task<T> SmartGetAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc);
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache. If specified key exists, then replace it.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">Key of the data to add.</param>
@@ -71,7 +115,7 @@ namespace SimpleCache
         bool Add<T>(string key, T data);
 
         /// <summary>
-        /// Attempts to add specified key and data to cache with specified lifespan.
+        /// Attempts to add specified key and data to cache with specified lifespan. If specified key exists, then replace it.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">Key of the data to add.</param>
@@ -81,7 +125,7 @@ namespace SimpleCache
         bool Add<T>(string key, T data, TimeSpan lifeSpan);
 
         /// <summary>
-        /// Attempts to add specified key and data to cache with specified due.
+        /// Attempts to add specified key and data to cache with specified due. If specified key exists, then replace it.
         /// </summary>
         /// <typeparam name="T">Type of the data.</typeparam>
         /// <param name="key">Key of the data to add.</param>
@@ -89,6 +133,35 @@ namespace SimpleCache
         /// <param name="due">Due of the data.</param>
         /// <returns></returns>
         bool Add<T>(string key, T data, DateTime due);
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to add.</param>
+        /// <param name="data">Data to add.</param>
+        /// <returns></returns>
+        bool AddOrReplace<T>(string key, T data);
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache with specified lifespan.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to add.</param>
+        /// <param name="data">Data to add.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <returns></returns>
+        bool AddOrReplace<T>(string key, T data, TimeSpan lifeSpan);
+
+        /// <summary>
+        /// Attempts to add specified key and data to cache with specified due.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to add.</param>
+        /// <param name="data">Data to add.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <returns></returns>
+        bool AddOrReplace<T>(string key, T data, DateTime due);
 
         /// <summary>
         /// Attempts to replace data with specified key.
@@ -156,7 +229,7 @@ namespace SimpleCache
         /// <param name="key">The key of the data to check.</param>
         /// <param name="replaceFunc">Replace func to generate.</param>
         /// <returns></returns>
-        bool CheckAndReplace<T>(string key, Func<T> replaceFunc);
+        bool CheckAndAddOrReplace<T>(string key, Func<T> replaceFunc);
 
         /// <summary>
         /// Check if specified key exists. If not, execute async replace func to generate a new one.
@@ -165,6 +238,46 @@ namespace SimpleCache
         /// <param name="key">The key of the data to check.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        Task<bool> CheckAndReplaceAsync<T>(string key, Func<Task<T>> replaceFunc);
+        Task<bool> CheckAndAddOrReplaceAsync<T>(string key, Func<Task<T>> replaceFunc);
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Replace func to generate.</param>
+        /// <returns></returns>
+        bool CheckAndAddOrReplace<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc);
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute async replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="lifeSpan">Lifespan of the data.</param>
+        /// <param name="replaceFunc">Async replace func to generate.</param>
+        /// <returns></returns>
+        Task<bool> CheckAndAddOrReplaceAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc);
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Replace func to generate.</param>
+        /// <returns></returns>
+        bool CheckAndAddOrReplace<T>(string key, DateTime due, Func<T> replaceFunc);
+
+        /// <summary>
+        /// Check if specified key exists. If not, execute async replace func to generate a new one.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">The key of the data to check.</param>
+        /// <param name="due">Due of the data.</param>
+        /// <param name="replaceFunc">Async replace func to generate.</param>
+        /// <returns></returns>
+        Task<bool> CheckAndAddOrReplaceAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc);
     }
 }
