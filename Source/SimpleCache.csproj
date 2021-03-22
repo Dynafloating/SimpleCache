@@ -6,11 +6,12 @@
     <Authors>Frank Tsai</Authors>
     <Company>Frank Tsai</Company>
     <Description>A very simple .net cache library.</Description>
-    <Version>0.1.2</Version>
+    <Version>0.1.4</Version>
     <PackageProjectUrl>https://github.com/Dynafloating/SimpleCache</PackageProjectUrl>
-    <Copyright>Apache License 2.0</Copyright>
+    <Copyright></Copyright>
     <RepositoryUrl>https://github.com/Dynafloating/SimpleCache</RepositoryUrl>
     <PackageId>FT.SimpleCache</PackageId>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

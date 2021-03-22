@@ -117,7 +117,7 @@ namespace SimpleCache
         /// <returns></returns>
         public T SmartGet<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc)
         {
-            return CheckAndAddOrReplace(key, replaceFunc) ? Get<T>(key) : default;
+            return CheckAndAddOrReplace(key, lifeSpan, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace SimpleCache
         /// <returns></returns>
         public async Task<T> SmartGetAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc)
         {
-            return await CheckAndAddOrReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
+            return await CheckAndAddOrReplaceAsync(key, lifeSpan, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace SimpleCache
         /// <returns></returns>
         public T SmartGet<T>(string key, DateTime due, Func<T> replaceFunc)
         {
-            return CheckAndAddOrReplace(key, replaceFunc) ? Get<T>(key) : default;
+            return CheckAndAddOrReplace(key, due, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace SimpleCache
         /// <returns></returns>
         public async Task<T> SmartGetAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc)
         {
-            return await CheckAndAddOrReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
+            return await CheckAndAddOrReplaceAsync(key, due, replaceFunc) ? Get<T>(key) : default;
         }
 
         #endregion
