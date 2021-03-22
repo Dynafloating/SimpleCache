@@ -238,7 +238,7 @@ namespace SimpleCache
         /// <param name="key">The key of the data to check.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        Task<bool> CheckAndAddOrReplaceAsync<T>(string key, Func<Task<T>> replaceFunc);
+        Task<bool> CheckAndAddOrRenewAsync<T>(string key, Func<Task<T>> replaceFunc);
 
         /// <summary>
         /// Check if specified key exists. If not, execute replace func to generate a new one.
@@ -248,7 +248,7 @@ namespace SimpleCache
         /// <param name="lifeSpan">Lifespan of the data.</param>
         /// <param name="replaceFunc">Replace func to generate.</param>
         /// <returns></returns>
-        bool CheckAndAddOrReplace<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc);
+        bool CheckAndAddOrRenew<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc);
 
         /// <summary>
         /// Check if specified key exists. If not, execute async replace func to generate a new one.
@@ -258,7 +258,7 @@ namespace SimpleCache
         /// <param name="lifeSpan">Lifespan of the data.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        Task<bool> CheckAndAddOrReplaceAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc);
+        Task<bool> CheckAndAddOrRenewAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc);
 
         /// <summary>
         /// Check if specified key exists. If not, execute replace func to generate a new one.
@@ -268,7 +268,7 @@ namespace SimpleCache
         /// <param name="due">Due of the data.</param>
         /// <param name="replaceFunc">Replace func to generate.</param>
         /// <returns></returns>
-        bool CheckAndAddOrReplace<T>(string key, DateTime due, Func<T> replaceFunc);
+        bool CheckAndAddOrRenew<T>(string key, DateTime due, Func<T> replaceFunc);
 
         /// <summary>
         /// Check if specified key exists. If not, execute async replace func to generate a new one.
@@ -278,6 +278,6 @@ namespace SimpleCache
         /// <param name="due">Due of the data.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        Task<bool> CheckAndAddOrReplaceAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc);
+        Task<bool> CheckAndAddOrRenewAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc);
     }
 }

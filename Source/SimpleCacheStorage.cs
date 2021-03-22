@@ -103,7 +103,7 @@ namespace SimpleCache
         /// <returns></returns>
         public async Task<T> SmartGetAsync<T>(string key, Func<Task<T>> replaceFunc)
         {
-            return await CheckAndAddOrReplaceAsync(key, replaceFunc) ? Get<T>(key) : default;
+            return await CheckAndAddOrRenewAsync(key, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SimpleCache
         /// <returns></returns>
         public T SmartGet<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc)
         {
-            return CheckAndAddOrReplace(key, lifeSpan, replaceFunc) ? Get<T>(key) : default;
+            return CheckAndAddOrRenew(key, lifeSpan, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace SimpleCache
         /// <returns></returns>
         public async Task<T> SmartGetAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc)
         {
-            return await CheckAndAddOrReplaceAsync(key, lifeSpan, replaceFunc) ? Get<T>(key) : default;
+            return await CheckAndAddOrRenewAsync(key, lifeSpan, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace SimpleCache
         /// <returns></returns>
         public T SmartGet<T>(string key, DateTime due, Func<T> replaceFunc)
         {
-            return CheckAndAddOrReplace(key, due, replaceFunc) ? Get<T>(key) : default;
+            return CheckAndAddOrRenew(key, due, replaceFunc) ? Get<T>(key) : default;
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace SimpleCache
         /// <returns></returns>
         public async Task<T> SmartGetAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc)
         {
-            return await CheckAndAddOrReplaceAsync(key, due, replaceFunc) ? Get<T>(key) : default;
+            return await CheckAndAddOrRenewAsync(key, due, replaceFunc) ? Get<T>(key) : default;
         }
 
         #endregion
@@ -306,6 +306,44 @@ namespace SimpleCache
         }
 
         /// <summary>
+        /// Attempts to extend then replace data with specified key.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to renew.</param>
+        /// <param name="lifeSpan">New lifespan.</param>
+        /// <param name="data">New data to renew.</param>
+        /// <returns></returns>
+        public virtual bool Renew<T>(string key, TimeSpan lifeSpan, T data)
+        {
+            return ProcessCacheData(key, cacheData =>
+            {
+                cacheData.LifeSpan = lifeSpan;
+                cacheData.Data = data;
+                cacheData.Extend();
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// Attempts to extend then replace data with specified key.
+        /// </summary>
+        /// <typeparam name="T">Type of the data.</typeparam>
+        /// <param name="key">Key of the data to renew.</param>
+        /// <param name="due">New due of data.</param>
+        /// <param name="data">New data to renew.</param>
+        /// <returns></returns>
+        public virtual bool Renew<T>(string key, DateTime due, T data)
+        {
+            return ProcessCacheData(key, cacheData =>
+            {
+                cacheData.LifeSpan = due - cacheData.Create;
+                cacheData.Data = data;
+                cacheData.Extend();
+                return true;
+            });
+        }
+
+        /// <summary>
         /// Attempts to update due of data with specified key.
         /// </summary>
         /// <param name="key">Key of the data to update.</param>
@@ -402,7 +440,7 @@ namespace SimpleCache
         /// <param name="key">The key of the data to check.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        public virtual async Task<bool> CheckAndAddOrReplaceAsync<T>(string key, Func<Task<T>> replaceFunc)
+        public virtual async Task<bool> CheckAndAddOrRenewAsync<T>(string key, Func<Task<T>> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
@@ -411,7 +449,7 @@ namespace SimpleCache
             }
             else if (isOverDue.Value)
             {
-                return Replace(key, await replaceFunc());
+                return Renew(key, await replaceFunc());
             }
 
             return true;
@@ -425,7 +463,7 @@ namespace SimpleCache
         /// <param name="lifeSpan">Lifespan of the data.</param>
         /// <param name="replaceFunc">Replace func to generate.</param>
         /// <returns></returns>
-        public virtual bool CheckAndAddOrReplace<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc)
+        public virtual bool CheckAndAddOrRenew<T>(string key, TimeSpan lifeSpan, Func<T> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
@@ -434,7 +472,7 @@ namespace SimpleCache
             }
             else if (isOverDue.Value)
             {
-                return Replace(key, replaceFunc());
+                return Renew(key, lifeSpan, replaceFunc());
             }
 
             return true;
@@ -448,7 +486,7 @@ namespace SimpleCache
         /// <param name="lifeSpan">Lifespan of the data.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        public virtual async Task<bool> CheckAndAddOrReplaceAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc)
+        public virtual async Task<bool> CheckAndAddOrRenewAsync<T>(string key, TimeSpan lifeSpan, Func<Task<T>> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
@@ -457,7 +495,7 @@ namespace SimpleCache
             }
             else if (isOverDue.Value)
             {
-                return Replace(key, await replaceFunc());
+                return Renew(key, lifeSpan, await replaceFunc());
             }
 
             return true;
@@ -471,7 +509,7 @@ namespace SimpleCache
         /// <param name="due">Due of the data.</param>
         /// <param name="replaceFunc">Replace func to generate.</param>
         /// <returns></returns>
-        public virtual bool CheckAndAddOrReplace<T>(string key, DateTime due, Func<T> replaceFunc)
+        public virtual bool CheckAndAddOrRenew<T>(string key, DateTime due, Func<T> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
@@ -480,7 +518,7 @@ namespace SimpleCache
             }
             else if (isOverDue.Value)
             {
-                return Replace(key, replaceFunc());
+                return Renew(key, due, replaceFunc());
             }
 
             return true;
@@ -494,7 +532,7 @@ namespace SimpleCache
         /// <param name="due">Due of the data.</param>
         /// <param name="replaceFunc">Async replace func to generate.</param>
         /// <returns></returns>
-        public virtual async Task<bool> CheckAndAddOrReplaceAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc)
+        public virtual async Task<bool> CheckAndAddOrRenewAsync<T>(string key, DateTime due, Func<Task<T>> replaceFunc)
         {
             var isOverDue = IsOverDue(key);
             if (!isOverDue.HasValue)
@@ -503,7 +541,7 @@ namespace SimpleCache
             }
             else if (isOverDue.Value)
             {
-                return Replace(key, await replaceFunc());
+                return Renew(key, due, await replaceFunc());
             }
 
             return true;

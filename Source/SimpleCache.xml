@@ -269,7 +269,7 @@
             <param name="replaceFunc">Replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrReplaceAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrRenewAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
             <summary>
             Check if specified key exists. If not, execute async replace func to generate a new one.
             </summary>
@@ -278,7 +278,7 @@
             <param name="replaceFunc">Async replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrReplace``1(System.String,System.TimeSpan,System.Func{``0})">
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrRenew``1(System.String,System.TimeSpan,System.Func{``0})">
             <summary>
             Check if specified key exists. If not, execute replace func to generate a new one.
             </summary>
@@ -288,7 +288,7 @@
             <param name="replaceFunc">Replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrReplaceAsync``1(System.String,System.TimeSpan,System.Func{System.Threading.Tasks.Task{``0}})">
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrRenewAsync``1(System.String,System.TimeSpan,System.Func{System.Threading.Tasks.Task{``0}})">
             <summary>
             Check if specified key exists. If not, execute async replace func to generate a new one.
             </summary>
@@ -298,7 +298,7 @@
             <param name="replaceFunc">Async replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrReplace``1(System.String,System.DateTime,System.Func{``0})">
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrRenew``1(System.String,System.DateTime,System.Func{``0})">
             <summary>
             Check if specified key exists. If not, execute replace func to generate a new one.
             </summary>
@@ -308,7 +308,7 @@
             <param name="replaceFunc">Replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrReplaceAsync``1(System.String,System.DateTime,System.Func{System.Threading.Tasks.Task{``0}})">
+        <member name="M:SimpleCache.ISimpleCacheService.CheckAndAddOrRenewAsync``1(System.String,System.DateTime,System.Func{System.Threading.Tasks.Task{``0}})">
             <summary>
             Check if specified key exists. If not, execute async replace func to generate a new one.
             </summary>
@@ -526,6 +526,26 @@
             <param name="data">New data to renew.</param>
             <returns></returns>
         </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Renew``1(System.String,System.TimeSpan,``0)">
+            <summary>
+            Attempts to extend then replace data with specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to renew.</param>
+            <param name="lifeSpan">New lifespan.</param>
+            <param name="data">New data to renew.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Renew``1(System.String,System.DateTime,``0)">
+            <summary>
+            Attempts to extend then replace data with specified key.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="key">Key of the data to renew.</param>
+            <param name="due">New due of data.</param>
+            <param name="data">New data to renew.</param>
+            <returns></returns>
+        </member>
         <member name="M:SimpleCache.SimpleCacheStorage.UpdateDue(System.String,System.DateTime,System.Boolean)">
             <summary>
             Attempts to update due of data with specified key.
@@ -561,7 +581,7 @@
             <param name="replaceFunc">Replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrReplaceAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrRenewAsync``1(System.String,System.Func{System.Threading.Tasks.Task{``0}})">
             <summary>
             Check if specified key exists. If not, execute async replace func to generate a new one.
             </summary>
@@ -570,7 +590,7 @@
             <param name="replaceFunc">Async replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrReplace``1(System.String,System.TimeSpan,System.Func{``0})">
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrRenew``1(System.String,System.TimeSpan,System.Func{``0})">
             <summary>
             Check if specified key exists. If not, execute replace func to generate a new one.
             </summary>
@@ -580,7 +600,7 @@
             <param name="replaceFunc">Replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrReplaceAsync``1(System.String,System.TimeSpan,System.Func{System.Threading.Tasks.Task{``0}})">
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrRenewAsync``1(System.String,System.TimeSpan,System.Func{System.Threading.Tasks.Task{``0}})">
             <summary>
             Check if specified key exists. If not, execute async replace func to generate a new one.
             </summary>
@@ -590,7 +610,7 @@
             <param name="replaceFunc">Async replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrReplace``1(System.String,System.DateTime,System.Func{``0})">
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrRenew``1(System.String,System.DateTime,System.Func{``0})">
             <summary>
             Check if specified key exists. If not, execute replace func to generate a new one.
             </summary>
@@ -600,7 +620,7 @@
             <param name="replaceFunc">Replace func to generate.</param>
             <returns></returns>
         </member>
-        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrReplaceAsync``1(System.String,System.DateTime,System.Func{System.Threading.Tasks.Task{``0}})">
+        <member name="M:SimpleCache.SimpleCacheStorage.CheckAndAddOrRenewAsync``1(System.String,System.DateTime,System.Func{System.Threading.Tasks.Task{``0}})">
             <summary>
             Check if specified key exists. If not, execute async replace func to generate a new one.
             </summary>

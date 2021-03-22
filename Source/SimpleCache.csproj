@@ -6,7 +6,7 @@
     <Authors>Frank Tsai</Authors>
     <Company>Frank Tsai</Company>
     <Description>A very simple .net cache library.</Description>
-    <Version>0.1.4</Version>
+    <Version>0.1.6</Version>
     <PackageProjectUrl>https://github.com/Dynafloating/SimpleCache</PackageProjectUrl>
     <Copyright></Copyright>
     <RepositoryUrl>https://github.com/Dynafloating/SimpleCache</RepositoryUrl>
