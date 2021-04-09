@@ -384,6 +384,29 @@ namespace SimpleCache
         }
 
         /// <summary>
+        /// Attempts to remove multiple datas base a predicate.
+        /// </summary>
+        /// <param name="predicate">A function to test each data element for a condition.</param>
+        /// <returns></returns>
+        public virtual bool Remove(Func<string, bool> predicate)
+        {
+            if (_storage.Count > 0)
+            {
+                foreach (var key in _storage.Keys.Where(key => predicate(key)))
+                {
+                    if (!_storage.TryRemove(key, out _))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Removes all overdue datas.
         /// </summary>
         public virtual void ClearOverDues()

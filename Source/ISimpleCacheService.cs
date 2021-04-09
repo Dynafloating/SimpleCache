@@ -213,6 +213,13 @@ namespace SimpleCache
         bool Remove(string key);
 
         /// <summary>
+        /// Attempts to remove multiple datas base a predicate.
+        /// </summary>
+        /// <param name="predicate">A function to test each data element for a condition.</param>
+        /// <returns></returns>
+        bool Remove(Func<string, bool> predicate);
+
+        /// <summary>
         /// Removes all overdue datas.
         /// </summary>
         void ClearOverDues();

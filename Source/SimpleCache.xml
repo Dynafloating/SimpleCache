@@ -250,6 +250,13 @@
             <param name="key">The key of the data to remove.</param>
             <returns></returns>
         </member>
+        <member name="M:SimpleCache.ISimpleCacheService.Remove(System.Func{System.String,System.Boolean})">
+            <summary>
+            Attempts to remove multiple datas base a predicate.
+            </summary>
+            <param name="predicate">A function to test each data element for a condition.</param>
+            <returns></returns>
+        </member>
         <member name="M:SimpleCache.ISimpleCacheService.ClearOverDues">
             <summary>
             Removes all overdue datas.
@@ -560,6 +567,13 @@
             Attempts to remove data with the specified key.
             </summary>
             <param name="key">The key of the data to remove.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleCache.SimpleCacheStorage.Remove(System.Func{System.String,System.Boolean})">
+            <summary>
+            Attempts to remove multiple datas base a predicate.
+            </summary>
+            <param name="predicate">A function to test each data element for a condition.</param>
             <returns></returns>
         </member>
         <member name="M:SimpleCache.SimpleCacheStorage.ClearOverDues">
